@@ -1,18 +1,21 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./../db/index');
 
 const app = express();
 
+const publicFilesPath = __dirname + './../public/';
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(express.static(publicFilesPath));
+
+
 const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
-
-app.use(bodyParser.json());
-
-const publicFilesPath = __dirname + './../public/';
-
-app.use(express.static(publicFilesPath));
 
 
 // ======================
@@ -43,6 +46,7 @@ app.get('*', (req, res, next) => {
     .then((story) => {
       if ((story !== undefined) && (story !== null)) {
         // render the story
+
       } else { // there is no story
         res.status(404).redirect('/html/404Page.html');
       }
